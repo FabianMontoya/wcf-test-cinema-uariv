@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="WCFCinema.Servicios.Reservas" CodeBehind="Reservas.svc.cs" %>

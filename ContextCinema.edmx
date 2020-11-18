@@ -1,0 +1,638 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BDCinemaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="FDM_Funcion">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="numeric" Precision="6" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="F_Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="F_Precio" Type="numeric" Precision="6" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FDM_FuncionHora">
+          <Key>
+            <PropertyRef Name="HF_Funcion_ID" />
+            <PropertyRef Name="HF_Fecha" />
+            <PropertyRef Name="HF_Hora" />
+          </Key>
+          <Property Name="HF_Funcion_ID" Type="numeric" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="HF_Fecha" Type="date" Nullable="false" />
+          <Property Name="HF_Hora" Type="time" Precision="7" Nullable="false" />
+          <Property Name="HF_Descuento" Type="numeric" Precision="1" Scale="0" Nullable="false" />
+          <Property Name="HF_PorcentajeDescuento" Type="numeric" Precision="3" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FDM_FuncionHoraSilla">
+          <Key>
+            <PropertyRef Name="FHS_Funcion_ID" />
+            <PropertyRef Name="FHS_Fecha" />
+            <PropertyRef Name="FHS_Hora" />
+            <PropertyRef Name="FHS_Silla" />
+          </Key>
+          <Property Name="FHS_Funcion_ID" Type="numeric" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="FHS_Fecha" Type="date" Nullable="false" />
+          <Property Name="FHS_Hora" Type="time" Precision="7" Nullable="false" />
+          <Property Name="FHS_Silla" Type="numeric" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="FHS_Reservada" Type="numeric" Precision="1" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FDM_Reserva">
+          <Key>
+            <PropertyRef Name="R_Funcion_ID" />
+            <PropertyRef Name="R_Fecha" />
+            <PropertyRef Name="R_Hora" />
+            <PropertyRef Name="R_Silla" />
+            <PropertyRef Name="R_DocumentoPersona" />
+          </Key>
+          <Property Name="R_Funcion_ID" Type="numeric" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="R_Fecha" Type="date" Nullable="false" />
+          <Property Name="R_Hora" Type="time" Precision="7" Nullable="false" />
+          <Property Name="R_Silla" Type="numeric" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="R_DocumentoPersona" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="R_NombrePersona" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="R_TelefonoPersona" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="R_ValorPagado" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="R_FechaReserva" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_FDM_FuncionHora_FDM_Funcion">
+          <End Role="FDM_Funcion" Type="Self.FDM_Funcion" Multiplicity="1" />
+          <End Role="FDM_FuncionHora" Type="Self.FDM_FuncionHora" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FDM_Funcion">
+              <PropertyRef Name="F_ID" />
+            </Principal>
+            <Dependent Role="FDM_FuncionHora">
+              <PropertyRef Name="HF_Funcion_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FDM_FuncionHoraSilla_FDM_FuncionHora">
+          <End Role="FDM_FuncionHora" Type="Self.FDM_FuncionHora" Multiplicity="1" />
+          <End Role="FDM_FuncionHoraSilla" Type="Self.FDM_FuncionHoraSilla" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FDM_FuncionHora">
+              <PropertyRef Name="HF_Funcion_ID" />
+              <PropertyRef Name="HF_Fecha" />
+              <PropertyRef Name="HF_Hora" />
+            </Principal>
+            <Dependent Role="FDM_FuncionHoraSilla">
+              <PropertyRef Name="FHS_Funcion_ID" />
+              <PropertyRef Name="FHS_Fecha" />
+              <PropertyRef Name="FHS_Hora" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FDM_Reserva_FDM_FuncionHoraSilla">
+          <End Role="FDM_FuncionHoraSilla" Type="Self.FDM_FuncionHoraSilla" Multiplicity="1" />
+          <End Role="FDM_Reserva" Type="Self.FDM_Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FDM_FuncionHoraSilla">
+              <PropertyRef Name="FHS_Funcion_ID" />
+              <PropertyRef Name="FHS_Fecha" />
+              <PropertyRef Name="FHS_Hora" />
+              <PropertyRef Name="FHS_Silla" />
+            </Principal>
+            <Dependent Role="FDM_Reserva">
+              <PropertyRef Name="R_Funcion_ID" />
+              <PropertyRef Name="R_Fecha" />
+              <PropertyRef Name="R_Hora" />
+              <PropertyRef Name="R_Silla" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="ConsultFechasFuncion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="funcion_ID" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="ConsultFunciones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ConsultHorariosReservasFuncion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="funcion" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="ConsultHorasFuncion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="funcion_ID" Type="numeric" Mode="In" />
+          <Parameter Name="fecha" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ConsultReservasFuncionHora" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="funcion" Type="numeric" Mode="In" />
+          <Parameter Name="fecha" Type="nvarchar" Mode="In" />
+          <Parameter Name="hora" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ConsultSillasFuncion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="funcion_ID" Type="numeric" Mode="In" />
+          <Parameter Name="fecha" Type="nvarchar" Mode="In" />
+          <Parameter Name="hora" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="CreateFuncion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="Precio" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="CreateFuncionHora" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="funcion_ID" Type="numeric" Mode="In" />
+          <Parameter Name="fecha" Type="nvarchar" Mode="In" />
+          <Parameter Name="hora" Type="nvarchar" Mode="In" />
+          <Parameter Name="descuento" Type="numeric" Mode="In" />
+          <Parameter Name="porcentaje" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="CreateReserva" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="funcion_ID" Type="numeric" Mode="In" />
+          <Parameter Name="fecha" Type="nvarchar" Mode="In" />
+          <Parameter Name="hora" Type="nvarchar" Mode="In" />
+          <Parameter Name="silla" Type="numeric" Mode="In" />
+          <Parameter Name="documento" Type="nvarchar" Mode="In" />
+          <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="telefono" Type="nvarchar" Mode="In" />
+          <Parameter Name="valorPaga" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="CreateSillaFuncion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="funcion_ID" Type="numeric" Mode="In" />
+          <Parameter Name="fecha" Type="nvarchar" Mode="In" />
+          <Parameter Name="hora" Type="nvarchar" Mode="In" />
+          <Parameter Name="silla" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="BDCinemaModelStoreContainer">
+          <EntitySet Name="FDM_Funcion" EntityType="Self.FDM_Funcion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FDM_FuncionHora" EntityType="Self.FDM_FuncionHora" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FDM_FuncionHoraSilla" EntityType="Self.FDM_FuncionHoraSilla" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FDM_Reserva" EntityType="Self.FDM_Reserva" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_FDM_FuncionHora_FDM_Funcion" Association="Self.FK_FDM_FuncionHora_FDM_Funcion">
+            <End Role="FDM_Funcion" EntitySet="FDM_Funcion" />
+            <End Role="FDM_FuncionHora" EntitySet="FDM_FuncionHora" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FDM_FuncionHoraSilla_FDM_FuncionHora" Association="Self.FK_FDM_FuncionHoraSilla_FDM_FuncionHora">
+            <End Role="FDM_FuncionHora" EntitySet="FDM_FuncionHora" />
+            <End Role="FDM_FuncionHoraSilla" EntitySet="FDM_FuncionHoraSilla" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FDM_Reserva_FDM_FuncionHoraSilla" Association="Self.FK_FDM_Reserva_FDM_FuncionHoraSilla">
+            <End Role="FDM_FuncionHoraSilla" EntitySet="FDM_FuncionHoraSilla" />
+            <End Role="FDM_Reserva" EntitySet="FDM_Reserva" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BDCinemaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="FDM_Funcion">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="Decimal" Precision="6" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="F_Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="F_Precio" Type="Decimal" Precision="6" Scale="0" Nullable="false" />
+          <NavigationProperty Name="FDM_FuncionHora" Relationship="Self.FK_FDM_FuncionHora_FDM_Funcion" FromRole="FDM_Funcion" ToRole="FDM_FuncionHora" />
+        </EntityType>
+        <EntityType Name="FDM_FuncionHora">
+          <Key>
+            <PropertyRef Name="HF_Funcion_ID" />
+            <PropertyRef Name="HF_Fecha" />
+            <PropertyRef Name="HF_Hora" />
+          </Key>
+          <Property Name="HF_Funcion_ID" Type="Decimal" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="HF_Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="HF_Hora" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="HF_Descuento" Type="Decimal" Precision="1" Scale="0" Nullable="false" />
+          <Property Name="HF_PorcentajeDescuento" Type="Decimal" Precision="3" Scale="0" Nullable="false" />
+          <NavigationProperty Name="FDM_Funcion" Relationship="Self.FK_FDM_FuncionHora_FDM_Funcion" FromRole="FDM_FuncionHora" ToRole="FDM_Funcion" />
+          <NavigationProperty Name="FDM_FuncionHoraSilla" Relationship="Self.FK_FDM_FuncionHoraSilla_FDM_FuncionHora" FromRole="FDM_FuncionHora" ToRole="FDM_FuncionHoraSilla" />
+        </EntityType>
+        <EntityType Name="FDM_FuncionHoraSilla">
+          <Key>
+            <PropertyRef Name="FHS_Funcion_ID" />
+            <PropertyRef Name="FHS_Fecha" />
+            <PropertyRef Name="FHS_Hora" />
+            <PropertyRef Name="FHS_Silla" />
+          </Key>
+          <Property Name="FHS_Funcion_ID" Type="Decimal" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="FHS_Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FHS_Hora" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="FHS_Silla" Type="Decimal" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="FHS_Reservada" Type="Decimal" Precision="1" Scale="0" Nullable="false" />
+          <NavigationProperty Name="FDM_FuncionHora" Relationship="Self.FK_FDM_FuncionHoraSilla_FDM_FuncionHora" FromRole="FDM_FuncionHoraSilla" ToRole="FDM_FuncionHora" />
+          <NavigationProperty Name="FDM_Reserva" Relationship="Self.FK_FDM_Reserva_FDM_FuncionHoraSilla" FromRole="FDM_FuncionHoraSilla" ToRole="FDM_Reserva" />
+        </EntityType>
+        <EntityType Name="FDM_Reserva">
+          <Key>
+            <PropertyRef Name="R_Funcion_ID" />
+            <PropertyRef Name="R_Fecha" />
+            <PropertyRef Name="R_Hora" />
+            <PropertyRef Name="R_Silla" />
+            <PropertyRef Name="R_DocumentoPersona" />
+          </Key>
+          <Property Name="R_Funcion_ID" Type="Decimal" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="R_Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="R_Hora" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="R_Silla" Type="Decimal" Precision="6" Scale="0" Nullable="false" />
+          <Property Name="R_DocumentoPersona" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="R_NombrePersona" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="R_TelefonoPersona" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="R_ValorPagado" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="R_FechaReserva" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="FDM_FuncionHoraSilla" Relationship="Self.FK_FDM_Reserva_FDM_FuncionHoraSilla" FromRole="FDM_Reserva" ToRole="FDM_FuncionHoraSilla" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_FDM_FuncionHora_FDM_Funcion">
+          <End Role="FDM_Funcion" Type="Self.FDM_Funcion" Multiplicity="1" />
+          <End Role="FDM_FuncionHora" Type="Self.FDM_FuncionHora" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FDM_Funcion">
+              <PropertyRef Name="F_ID" />
+            </Principal>
+            <Dependent Role="FDM_FuncionHora">
+              <PropertyRef Name="HF_Funcion_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FDM_FuncionHoraSilla_FDM_FuncionHora">
+          <End Role="FDM_FuncionHora" Type="Self.FDM_FuncionHora" Multiplicity="1" />
+          <End Role="FDM_FuncionHoraSilla" Type="Self.FDM_FuncionHoraSilla" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FDM_FuncionHora">
+              <PropertyRef Name="HF_Funcion_ID" />
+              <PropertyRef Name="HF_Fecha" />
+              <PropertyRef Name="HF_Hora" />
+            </Principal>
+            <Dependent Role="FDM_FuncionHoraSilla">
+              <PropertyRef Name="FHS_Funcion_ID" />
+              <PropertyRef Name="FHS_Fecha" />
+              <PropertyRef Name="FHS_Hora" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FDM_Reserva_FDM_FuncionHoraSilla">
+          <End Role="FDM_FuncionHoraSilla" Type="Self.FDM_FuncionHoraSilla" Multiplicity="1" />
+          <End Role="FDM_Reserva" Type="Self.FDM_Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FDM_FuncionHoraSilla">
+              <PropertyRef Name="FHS_Funcion_ID" />
+              <PropertyRef Name="FHS_Fecha" />
+              <PropertyRef Name="FHS_Hora" />
+              <PropertyRef Name="FHS_Silla" />
+            </Principal>
+            <Dependent Role="FDM_Reserva">
+              <PropertyRef Name="R_Funcion_ID" />
+              <PropertyRef Name="R_Fecha" />
+              <PropertyRef Name="R_Hora" />
+              <PropertyRef Name="R_Silla" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BDCinemaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="FDM_Funcion" EntityType="Self.FDM_Funcion" />
+          <EntitySet Name="FDM_FuncionHora" EntityType="Self.FDM_FuncionHora" />
+          <EntitySet Name="FDM_FuncionHoraSilla" EntityType="Self.FDM_FuncionHoraSilla" />
+          <EntitySet Name="FDM_Reserva" EntityType="Self.FDM_Reserva" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK_FDM_FuncionHora_FDM_Funcion" Association="Self.FK_FDM_FuncionHora_FDM_Funcion">
+            <End Role="FDM_Funcion" EntitySet="FDM_Funcion" />
+            <End Role="FDM_FuncionHora" EntitySet="FDM_FuncionHora" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FDM_FuncionHoraSilla_FDM_FuncionHora" Association="Self.FK_FDM_FuncionHoraSilla_FDM_FuncionHora">
+            <End Role="FDM_FuncionHora" EntitySet="FDM_FuncionHora" />
+            <End Role="FDM_FuncionHoraSilla" EntitySet="FDM_FuncionHoraSilla" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FDM_Reserva_FDM_FuncionHoraSilla" Association="Self.FK_FDM_Reserva_FDM_FuncionHoraSilla">
+            <End Role="FDM_FuncionHoraSilla" EntitySet="FDM_FuncionHoraSilla" />
+            <End Role="FDM_Reserva" EntitySet="FDM_Reserva" />
+          </AssociationSet>
+          <FunctionImport Name="ConsultFechasFuncion" ReturnType="Collection(String)">
+            <Parameter Name="funcion_ID" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultFunciones" ReturnType="Collection(BDCinemaModel.ConsultFunciones_Result)" />
+          <FunctionImport Name="ConsultHorariosReservasFuncion" ReturnType="Collection(BDCinemaModel.ConsultHorariosReservasFuncion_Result)">
+            <Parameter Name="funcion" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultHorasFuncion" ReturnType="Collection(BDCinemaModel.ConsultHorasFuncion_Result)">
+            <Parameter Name="funcion_ID" Mode="In" Type="Decimal" />
+            <Parameter Name="fecha" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultReservasFuncionHora" ReturnType="Collection(BDCinemaModel.ConsultReservasFuncionHora_Result)">
+            <Parameter Name="funcion" Mode="In" Type="Decimal" />
+            <Parameter Name="fecha" Mode="In" Type="String" />
+            <Parameter Name="hora" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultSillasFuncion" ReturnType="Collection(BDCinemaModel.ConsultSillasFuncion_Result)">
+            <Parameter Name="funcion_ID" Mode="In" Type="Decimal" />
+            <Parameter Name="fecha" Mode="In" Type="String" />
+            <Parameter Name="hora" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CreateFuncion" ReturnType="Collection(String)">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Precio" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="CreateFuncionHora" ReturnType="Collection(String)">
+            <Parameter Name="funcion_ID" Mode="In" Type="Decimal" />
+            <Parameter Name="fecha" Mode="In" Type="String" />
+            <Parameter Name="hora" Mode="In" Type="String" />
+            <Parameter Name="descuento" Mode="In" Type="Decimal" />
+            <Parameter Name="porcentaje" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="CreateReserva" ReturnType="Collection(String)">
+            <Parameter Name="funcion_ID" Mode="In" Type="Decimal" />
+            <Parameter Name="fecha" Mode="In" Type="String" />
+            <Parameter Name="hora" Mode="In" Type="String" />
+            <Parameter Name="silla" Mode="In" Type="Decimal" />
+            <Parameter Name="documento" Mode="In" Type="String" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="telefono" Mode="In" Type="String" />
+            <Parameter Name="valorPaga" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="CreateSillaFuncion" ReturnType="Collection(String)">
+            <Parameter Name="funcion_ID" Mode="In" Type="Decimal" />
+            <Parameter Name="fecha" Mode="In" Type="String" />
+            <Parameter Name="hora" Mode="In" Type="String" />
+            <Parameter Name="silla" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(BDCinemaModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(BDCinemaModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="ConsultFunciones_Result">
+          <Property Type="Decimal" Name="F_ID" Nullable="false" Precision="6" Scale="0" />
+          <Property Type="String" Name="F_Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="F_Precio" Nullable="false" Precision="6" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="ConsultHorariosReservasFuncion_Result">
+          <Property Type="Decimal" Name="FHS_Funcion_ID" Nullable="false" Precision="6" Scale="0" />
+          <Property Type="String" Name="FHS_Fecha" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="FHS_Hora" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="TotalSillas" Nullable="true" />
+          <Property Type="Int32" Name="TotalReservas" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ConsultHorasFuncion_Result">
+          <Property Type="String" Name="HF_Hora" Nullable="true" MaxLength="30" />
+          <Property Type="Decimal" Name="HF_Descuento" Nullable="false" Precision="1" Scale="0" />
+          <Property Type="Decimal" Name="HF_PorcentajeDescuento" Nullable="false" Precision="3" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="ConsultReservasFuncionHora_Result">
+          <Property Type="Decimal" Name="R_Funcion_ID" Nullable="false" Precision="6" Scale="0" />
+          <Property Type="String" Name="R_Fecha" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="R_Hora" Nullable="true" MaxLength="30" />
+          <Property Type="Decimal" Name="R_Silla" Nullable="false" Precision="6" Scale="0" />
+          <Property Type="String" Name="R_DocumentoPersona" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="R_NombrePersona" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="R_TelefonoPersona" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="R_ValorPagado" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="R_FechaReserva" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="ConsultSillasFuncion_Result">
+          <Property Type="Decimal" Name="FHS_Silla" Nullable="false" Precision="6" Scale="0" />
+          <Property Type="Decimal" Name="FHS_Reservada" Nullable="false" Precision="1" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BDCinemaModelStoreContainer" CdmEntityContainer="BDCinemaEntities">
+          <EntitySetMapping Name="FDM_Funcion">
+            <EntityTypeMapping TypeName="BDCinemaModel.FDM_Funcion">
+              <MappingFragment StoreEntitySet="FDM_Funcion">
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
+                <ScalarProperty Name="F_Nombre" ColumnName="F_Nombre" />
+                <ScalarProperty Name="F_Precio" ColumnName="F_Precio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FDM_FuncionHora">
+            <EntityTypeMapping TypeName="BDCinemaModel.FDM_FuncionHora">
+              <MappingFragment StoreEntitySet="FDM_FuncionHora">
+                <ScalarProperty Name="HF_Funcion_ID" ColumnName="HF_Funcion_ID" />
+                <ScalarProperty Name="HF_Fecha" ColumnName="HF_Fecha" />
+                <ScalarProperty Name="HF_Hora" ColumnName="HF_Hora" />
+                <ScalarProperty Name="HF_Descuento" ColumnName="HF_Descuento" />
+                <ScalarProperty Name="HF_PorcentajeDescuento" ColumnName="HF_PorcentajeDescuento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FDM_FuncionHoraSilla">
+            <EntityTypeMapping TypeName="BDCinemaModel.FDM_FuncionHoraSilla">
+              <MappingFragment StoreEntitySet="FDM_FuncionHoraSilla">
+                <ScalarProperty Name="FHS_Funcion_ID" ColumnName="FHS_Funcion_ID" />
+                <ScalarProperty Name="FHS_Fecha" ColumnName="FHS_Fecha" />
+                <ScalarProperty Name="FHS_Hora" ColumnName="FHS_Hora" />
+                <ScalarProperty Name="FHS_Silla" ColumnName="FHS_Silla" />
+                <ScalarProperty Name="FHS_Reservada" ColumnName="FHS_Reservada" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FDM_Reserva">
+            <EntityTypeMapping TypeName="BDCinemaModel.FDM_Reserva">
+              <MappingFragment StoreEntitySet="FDM_Reserva">
+                <ScalarProperty Name="R_Funcion_ID" ColumnName="R_Funcion_ID" />
+                <ScalarProperty Name="R_Fecha" ColumnName="R_Fecha" />
+                <ScalarProperty Name="R_Hora" ColumnName="R_Hora" />
+                <ScalarProperty Name="R_Silla" ColumnName="R_Silla" />
+                <ScalarProperty Name="R_DocumentoPersona" ColumnName="R_DocumentoPersona" />
+                <ScalarProperty Name="R_NombrePersona" ColumnName="R_NombrePersona" />
+                <ScalarProperty Name="R_TelefonoPersona" ColumnName="R_TelefonoPersona" />
+                <ScalarProperty Name="R_ValorPagado" ColumnName="R_ValorPagado" />
+                <ScalarProperty Name="R_FechaReserva" ColumnName="R_FechaReserva" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="BDCinemaModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ConsultFechasFuncion" FunctionName="BDCinemaModel.Store.ConsultFechasFuncion" />
+          <FunctionImportMapping FunctionImportName="ConsultFunciones" FunctionName="BDCinemaModel.Store.ConsultFunciones">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDCinemaModel.ConsultFunciones_Result">
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
+                <ScalarProperty Name="F_Nombre" ColumnName="F_Nombre" />
+                <ScalarProperty Name="F_Precio" ColumnName="F_Precio" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConsultHorariosReservasFuncion" FunctionName="BDCinemaModel.Store.ConsultHorariosReservasFuncion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDCinemaModel.ConsultHorariosReservasFuncion_Result">
+                <ScalarProperty Name="FHS_Funcion_ID" ColumnName="FHS_Funcion_ID" />
+                <ScalarProperty Name="FHS_Fecha" ColumnName="FHS_Fecha" />
+                <ScalarProperty Name="FHS_Hora" ColumnName="FHS_Hora" />
+                <ScalarProperty Name="TotalSillas" ColumnName="TotalSillas" />
+                <ScalarProperty Name="TotalReservas" ColumnName="TotalReservas" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConsultHorasFuncion" FunctionName="BDCinemaModel.Store.ConsultHorasFuncion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDCinemaModel.ConsultHorasFuncion_Result">
+                <ScalarProperty Name="HF_Hora" ColumnName="HF_Hora" />
+                <ScalarProperty Name="HF_Descuento" ColumnName="HF_Descuento" />
+                <ScalarProperty Name="HF_PorcentajeDescuento" ColumnName="HF_PorcentajeDescuento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConsultReservasFuncionHora" FunctionName="BDCinemaModel.Store.ConsultReservasFuncionHora">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDCinemaModel.ConsultReservasFuncionHora_Result">
+                <ScalarProperty Name="R_Funcion_ID" ColumnName="R_Funcion_ID" />
+                <ScalarProperty Name="R_Fecha" ColumnName="R_Fecha" />
+                <ScalarProperty Name="R_Hora" ColumnName="R_Hora" />
+                <ScalarProperty Name="R_Silla" ColumnName="R_Silla" />
+                <ScalarProperty Name="R_DocumentoPersona" ColumnName="R_DocumentoPersona" />
+                <ScalarProperty Name="R_NombrePersona" ColumnName="R_NombrePersona" />
+                <ScalarProperty Name="R_TelefonoPersona" ColumnName="R_TelefonoPersona" />
+                <ScalarProperty Name="R_ValorPagado" ColumnName="R_ValorPagado" />
+                <ScalarProperty Name="R_FechaReserva" ColumnName="R_FechaReserva" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConsultSillasFuncion" FunctionName="BDCinemaModel.Store.ConsultSillasFuncion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDCinemaModel.ConsultSillasFuncion_Result">
+                <ScalarProperty Name="FHS_Silla" ColumnName="FHS_Silla" />
+                <ScalarProperty Name="FHS_Reservada" ColumnName="FHS_Reservada" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CreateFuncion" FunctionName="BDCinemaModel.Store.CreateFuncion" />
+          <FunctionImportMapping FunctionImportName="CreateFuncionHora" FunctionName="BDCinemaModel.Store.CreateFuncionHora" />
+          <FunctionImportMapping FunctionImportName="CreateReserva" FunctionName="BDCinemaModel.Store.CreateReserva" />
+          <FunctionImportMapping FunctionImportName="CreateSillaFuncion" FunctionName="BDCinemaModel.Store.CreateSillaFuncion" />
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="BDCinemaModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="BDCinemaModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="BDCinemaModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="BDCinemaModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDCinemaModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="BDCinemaModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDCinemaModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="BDCinemaModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="BDCinemaModel.Store.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="81286236155e4770b6389e0ba5459270" Name="Diagram1">
+        <EntityTypeShape EntityType="BDCinemaModel.FDM_Funcion" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDCinemaModel.FDM_FuncionHora" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDCinemaModel.FDM_FuncionHoraSilla" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDCinemaModel.FDM_Reserva" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDCinemaModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <AssociationConnector Association="BDCinemaModel.FK_FDM_FuncionHora_FDM_Funcion" ManuallyRouted="false" />
+        <AssociationConnector Association="BDCinemaModel.FK_FDM_FuncionHoraSilla_FDM_FuncionHora" ManuallyRouted="false" />
+        <AssociationConnector Association="BDCinemaModel.FK_FDM_Reserva_FDM_FuncionHoraSilla" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
